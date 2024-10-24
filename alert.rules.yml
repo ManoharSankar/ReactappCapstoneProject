@@ -1,0 +1,20 @@
+groups:
+  - name: express-app-alerts
+    rules:
+    - alert: ExpressAppDown
+      expr: up{job="express-server"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Express App is Down"
+        description: "The Express app has been down for more than 1 minute."
+
+    - alert: HighRequestDuration
+      expr: histogram_quantile(0.95, rate(http_request_duration_ms_bucket[5m])) > 500
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High HTTP Request Duration"
+        description: "95th percentile of HTTP request duration is greater than 500ms for the last 5 minutes."

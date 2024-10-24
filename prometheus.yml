@@ -1,5 +1,12 @@
 global:
   scrape_interval: 15s
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']  # Assuming you're using Alertmanager (optional)
+
+rule_files:
+  - "alert.rules.yml"  # Load alerting rules from an external file
 
 scrape_configs:
   - job_name: 'node-exporter'
