@@ -17,6 +17,19 @@ scrape_configs:
     metrics_path: '/metrics'
     static_configs:
       - targets: ['express-server:3001']
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Specify the module defined in blackbox.yml
+    static_configs:
+      - targets:
+          - http://13.201.9.156  # Replace with your target URL
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter:9115  # Blackbox Exporter service address
+
 
 
 

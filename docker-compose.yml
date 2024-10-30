@@ -38,7 +38,16 @@ services:
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
     networks:
-      - my-network 
+      - my-network
+  
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    ports:
+      - "9115:9115"
+    volumes:
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml
+    networks:
+      - my-network
 
   prometheus:
     image: prom/prometheus
@@ -51,6 +60,7 @@ services:
     depends_on:
       - express-server
       - node-exporter
+      - blackbox-exporter
 
   grafana:
     image: grafana/grafana
